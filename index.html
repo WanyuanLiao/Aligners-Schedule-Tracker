@@ -5,39 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>隱形牙套配戴日期</title>
   <meta property="og:title" content="隱形牙套配戴日期">
-<meta property="og:description" content="Aligners Schedule Tracker">
-<meta property="og:type" content="website">
+  <meta property="og:description" content="Aligner Change Schedule">
+  <meta property="og:type" content="website">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --ink: #1a1208;
-      --paper: #f5f0e8;
-      --gold: #c9a84c;
-      --gold-light: #e8d5a3;
-      --crimson: #8b1a1a;
-      --muted: #7a6f5f;
-      --line: #d6cdb8;
-      --surface: #ffffff;
-      --shadow: rgba(26,18,8,0.14);
-      --sun: #8b1a1a;
-      --sat: #6b5b9b;
+      --ink: #2a2a2a;
+      --paper: #f2ede4;
+      --gold: #7a9e6e;
+      --gold-light: #b8ccb0;
+      --crimson: #b85c45;
+      --muted: #7a7068;
+      --line: #c8c0b4;
+      --surface: #fdfaf6;
+      --shadow: rgba(44,44,44,0.12);
+      --sun: #b85c45;
+      --sat: #5c7a9e;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Noto Serif TC', serif;
-      background: var(--paper);
+      background: #ede8de;
       color: var(--ink);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 36px 16px 70px;
-      background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(198,185,158,0.22) 28px),
-        radial-gradient(ellipse at 80% 10%, rgba(201,168,76,0.07) 0%, transparent 60%),
-        radial-gradient(ellipse at 15% 90%, rgba(139,26,26,0.05) 0%, transparent 50%);
     }
 
     /* ── Header ── */
@@ -254,7 +250,7 @@
     }
     .interval-btn:hover {
       border-color: var(--gold);
-      background: #fffdf7;
+      background: #f4f7f2;
       box-shadow: 0 4px 14px var(--shadow);
     }
     .interval-btn.active {
@@ -300,7 +296,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     .result-header {
-      background: linear-gradient(90deg, #faf7f0, #fff8ee);
+      background: linear-gradient(90deg, #e8ede5, #f2ede4);
       padding: 8px 14px;
       border-bottom: 1px solid var(--line);
       display: flex;
@@ -375,7 +371,7 @@
 <header>
   <div>
     <div class="title-zh">隱形牙套配戴日期</div>
-    <div class="title-en" style="margin-top:4px;">Aligners Schedule Tracker</div>
+    <div class="title-en" style="margin-top:4px;">Aligner Schedule</div>
   </div>
   <div class="header-bar"></div>
 </header>
