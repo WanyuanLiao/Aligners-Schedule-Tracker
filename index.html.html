@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>牙套配戴日期</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a1208;
+      --paper: #f5f0e8;
+      --gold: #c9a84c;
+      --gold-light: #e8d5a3;
+      --crimson: #8b1a1a;
+      --muted: #7a6f5f;
+      --line: #d6cdb8;
+      --surface: #ffffff;
+      --shadow: rgba(26,18,8,0.14);
+      --sun: #8b1a1a;
+      --sat: #6b5b9b;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Serif TC', serif;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 36px 16px 70px;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(198,185,158,0.22) 28px),
+        radial-gradient(ellipse at 80% 10%, rgba(201,168,76,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse at 15% 90%, rgba(139,26,26,0.05) 0%, transparent 50%);
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: left;
+      width: 100%;
+      max-width: 760px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-end;
+      gap: 14px;
+    }
+    .title-zh {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: 4px;
+      line-height: 1;
+    }
+    .title-en {
+      font-family: 'Playfair Display', serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      padding-bottom: 2px;
+    }
+    .header-bar {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold-light), transparent);
+      margin-bottom: 4px;
+    }
+
+    /* ── Main two-column layout ── */
+    .main-row {
+      display: flex;
+      gap: 16px;
+      width: 100%;
+      max-width: 760px;
+      align-items: flex-start;
+    }
+
+    /* ── Calendar card ── */
+    .calendar-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 12px 10px 10px;
+      box-shadow: 0 6px 32px var(--shadow), 0 1px 4px rgba(0,0,0,0.05);
+      position: relative;
+      flex: 1;
+      min-width: 0;
+    }
+    .calendar-card::before {
+      content: '';
+      position: absolute;
+      top: 4px; left: 4px; right: 4px; bottom: 4px;
+      border: 1px solid var(--gold-light);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+
+    /* Nav */
+    .cal-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .nav-btn {
+      background: none;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      cursor: pointer;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.18s;
+    }
+    .nav-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.06); }
+
+    .cal-nav-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+    .month-display {
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: 1px;
+    }
+    .picker-row {
+      display: flex;
+      gap: 6px;
+    }
+    .picker-row select {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 11px;
+      color: var(--ink);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      padding: 2px 18px 2px 6px;
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%237a6f5f'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 5px center;
+      background-size: 7px;
+      transition: border-color 0.2s;
+    }
+    .picker-row select:focus { border-color: var(--gold); }
+
+    /* Weekdays */
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      margin-bottom: 2px;
+    }
+    .weekday {
+      text-align: center;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      padding: 2px 0;
+    }
+    .weekday.sun { color: var(--sun); }
+    .weekday.sat { color: var(--sat); }
+
+    /* Days grid */
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+    }
+    .day-cell {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .day-cell:hover:not(.other-month) { background: var(--gold-light); }
+    .day-cell.sun { color: var(--sun); }
+    .day-cell.sat { color: var(--sat); }
+    .day-cell.other-month { opacity: 0.25; cursor: default; }
+    .day-cell.today { box-shadow: 0 0 0 1.5px var(--gold); font-weight: 700; }
+    .day-cell.selected {
+      background: var(--crimson) !important;
+      color: #fff !important;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(139,26,26,0.35);
+    }
+
+    /* Selected date strip */
+    .selected-strip {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+    .selected-strip strong { color: var(--crimson); font-size: 11px; }
+
+    /* ── Right panel ── */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 240px;
+      flex-shrink: 0;
+    }
+
+    .panel-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      padding: 0 2px 2px;
+      border-bottom: 1px solid var(--gold-light);
+    }
+
+    /* Interval buttons */
+    .interval-btn {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: all 0.18s;
+      text-align: left;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(26,18,8,0.06);
+      width: 100%;
+      font-family: 'Noto Serif TC', serif;
+    }
+    .interval-btn:hover {
+      border-color: var(--gold);
+      background: #fffdf7;
+      box-shadow: 0 4px 14px var(--shadow);
+    }
+    .interval-btn.active {
+      border-color: var(--crimson);
+      background: var(--crimson);
+      box-shadow: 0 4px 14px rgba(139,26,26,0.28);
+    }
+    .btn-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--crimson);
+      line-height: 1;
+    }
+    .interval-btn.active .btn-num { color: #fff; }
+    .btn-desc {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .interval-btn.active .btn-desc { color: rgba(255,255,255,0.85); }
+
+    /* Result card */
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px var(--shadow);
+      animation: fadeUp 0.2s ease;
+      position: relative;
+    }
+    .result-card::before {
+      content: '';
+      position: absolute;
+      top: 4px; left: 4px; right: 4px; bottom: 4px;
+      border: 1px solid var(--gold-light);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(5px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .result-header {
+      background: linear-gradient(90deg, #faf7f0, #fff8ee);
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .result-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--crimson);
+      letter-spacing: 0.5px;
+    }
+    .result-subtitle {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+    .result-rows { padding: 2px 0; }
+    .result-row {
+      display: flex;
+      align-items: center;
+      padding: 5px 12px;
+      gap: 8px;
+      border-bottom: 1px solid rgba(214,205,184,0.35);
+      transition: background 0.12s;
+    }
+    .result-row:last-child { border-bottom: none; }
+    .result-row:hover { background: var(--paper); }
+    .row-idx {
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold);
+      min-width: 18px;
+    }
+    .row-dates {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 16px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+    .row-start { font-weight: 700; }
+    .row-arrow { color: var(--line); font-size: 12px; font-weight: 400; }
+
+    /* Placeholder */
+    .placeholder {
+      border: 1px dashed var(--line);
+      border-radius: 4px;
+      padding: 18px 12px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.8;
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 580px) {
+      .main-row { flex-direction: column; }
+      .right-panel { width: 100%; }
+      .interval-btns-row { display: flex; gap: 8px; }
+      .interval-btn { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="title-zh">牙套配戴日期</div>
+    <div class="title-en" style="margin-top:4px;">Aligners Schedule Tracker</div>
+  </div>
+  <div class="header-bar"></div>
+</header>
+
+<div class="main-row">
+
+  <!-- Left: Calendar -->
+  <div class="calendar-card" id="calendarCard">
+    <div class="cal-nav">
+      <button class="nav-btn" id="prevMonth">&#8249;</button>
+      <div class="cal-nav-center">
+        <div class="month-display" id="monthDisplay"></div>
+        <div class="picker-row">
+          <select id="yearSelect"></select>
+          <select id="monthSelect"></select>
+        </div>
+      </div>
+      <button class="nav-btn" id="nextMonth">&#8250;</button>
+    </div>
+    <div class="weekdays">
+      <div class="weekday sun">日</div>
+      <div class="weekday">一</div>
+      <div class="weekday">二</div>
+      <div class="weekday">三</div>
+      <div class="weekday">四</div>
+      <div class="weekday">五</div>
+      <div class="weekday sat">六</div>
+    </div>
+    <div class="days-grid" id="daysGrid"></div>
+    <div class="selected-strip">已選日期：<strong id="selectedText"></strong></div>
+  </div>
+
+  <!-- Right: Buttons + Result -->
+  <div class="right-panel" id="rightPanel">
+    <div class="panel-label">更換區間</div>
+    <div class="interval-btns-row">
+      <button class="interval-btn" data-interval="5" onclick="selectInterval(5)">
+        <span class="btn-num">5</span>
+        <span class="btn-desc">每 5 天更換</span>
+      </button>
+      <button class="interval-btn" data-interval="7" onclick="selectInterval(7)">
+        <span class="btn-num">7</span>
+        <span class="btn-desc">每 7 天更換</span>
+      </button>
+      <button class="interval-btn" data-interval="10" onclick="selectInterval(10)">
+        <span class="btn-num">10</span>
+        <span class="btn-desc">每 10 天更換</span>
+      </button>
+    </div>
+    <div id="resultArea">
+      <div class="placeholder">點選左方日期<br>再選擇更換區間</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const MONTH_NAMES = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  const SEGMENTS = 8;
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  let viewYear = today.getFullYear();
+  let viewMonth = today.getMonth();
+  let selectedDate = new Date(today);
+  let activeInterval = null;
+
+  // Populate selects
+  const yearSel = document.getElementById('yearSelect');
+  const monthSel = document.getElementById('monthSelect');
+  for (let y = 1900; y <= 2200; y++) {
+    const o = document.createElement('option');
+    o.value = y; o.textContent = y + '年';
+    if (y === viewYear) o.selected = true;
+    yearSel.appendChild(o);
+  }
+  MONTH_NAMES.forEach((m, i) => {
+    const o = document.createElement('option');
+    o.value = i; o.textContent = m;
+    if (i === viewMonth) o.selected = true;
+    monthSel.appendChild(o);
+  });
+  yearSel.addEventListener('change', () => { viewYear = +yearSel.value; renderCalendar(); });
+  monthSel.addEventListener('change', () => { viewMonth = +monthSel.value; renderCalendar(); });
+  document.getElementById('prevMonth').addEventListener('click', () => {
+    viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; } renderCalendar();
+  });
+  document.getElementById('nextMonth').addEventListener('click', () => {
+    viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; } renderCalendar();
+  });
+
+  function pad(n) { return String(n).padStart(2,'0'); }
+  function fmtShort(d) { return `${d.getMonth()+1}/${pad(d.getDate())}`; }
+  function fmtFull(d) { return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`; }
+  function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate()+n); return r; }
+  function sameDay(a, b) { return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate(); }
+
+  function renderCalendar() {
+    yearSel.value = viewYear;
+    monthSel.value = viewMonth;
+    document.getElementById('monthDisplay').textContent = `${viewYear} 年 ${MONTH_NAMES[viewMonth]}`;
+    document.getElementById('selectedText').textContent = fmtFull(selectedDate);
+
+    const grid = document.getElementById('daysGrid');
+    grid.innerHTML = '';
+    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+    const prevDays = new Date(viewYear, viewMonth, 0).getDate();
+
+    for (let i = firstDay-1; i >= 0; i--)
+      grid.appendChild(makeCell(new Date(viewYear, viewMonth-1, prevDays-i), true));
+    for (let d = 1; d <= daysInMonth; d++)
+      grid.appendChild(makeCell(new Date(viewYear, viewMonth, d), false));
+    const rem = (firstDay + daysInMonth) % 7;
+    for (let d = 1; d <= (rem === 0 ? 0 : 7 - rem); d++)
+      grid.appendChild(makeCell(new Date(viewYear, viewMonth+1, d), true));
+
+    matchHeight();
+  }
+
+  function makeCell(dt, otherMonth) {
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+    const dow = dt.getDay();
+    if (dow === 0) cell.classList.add('sun');
+    if (dow === 6) cell.classList.add('sat');
+    if (otherMonth) cell.classList.add('other-month');
+    if (sameDay(dt, today)) cell.classList.add('today');
+    if (sameDay(dt, selectedDate)) cell.classList.add('selected');
+    cell.textContent = dt.getDate();
+    if (!otherMonth) {
+      cell.addEventListener('click', () => {
+        selectedDate = new Date(dt);
+        viewYear = dt.getFullYear();
+        viewMonth = dt.getMonth();
+        renderCalendar();
+        if (activeInterval) renderResult(activeInterval);
+      });
+    }
+    return cell;
+  }
+
+  function selectInterval(n) {
+    activeInterval = n;
+    document.querySelectorAll('.interval-btn').forEach(btn => {
+      btn.classList.toggle('active', +btn.dataset.interval === n);
+    });
+    renderResult(n);
+  }
+
+  function renderResult(interval) {
+    const area = document.getElementById('resultArea');
+    const card = document.createElement('div');
+    card.className = 'result-card';
+
+    let rowsHtml = '';
+    let cursor = new Date(selectedDate);
+    for (let i = 0; i < SEGMENTS; i++) {
+      const start = new Date(cursor);
+      const end = addDays(cursor, interval - 1);
+      rowsHtml += `
+        <div class="result-row">
+          <span class="row-idx">${i+1}</span>
+          <span class="row-dates">
+            <span class="row-start">${fmtShort(start)}</span>
+            <span class="row-arrow">→</span>
+            <span>${fmtShort(end)}</span>
+          </span>
+        </div>`;
+      cursor = addDays(cursor, interval);
+    }
+
+    card.innerHTML = `
+      <div class="result-header">
+        <span class="result-title">每 ${interval} 日更換</span>
+        <span class="result-subtitle">共 ${SEGMENTS} 副</span>
+      </div>
+      <div class="result-rows">${rowsHtml}</div>`;
+
+    area.innerHTML = '';
+    area.appendChild(card);
+
+    // After result rendered, re-match height
+    setTimeout(matchHeight, 20);
+  }
+
+  // Match calendar height to right panel height
+  function matchHeight() {
+    const cal = document.getElementById('calendarCard');
+    const right = document.getElementById('rightPanel');
+    // Reset first
+    cal.style.minHeight = '';
+    requestAnimationFrame(() => {
+      const rh = right.offsetHeight;
+      if (rh > cal.offsetHeight) cal.style.minHeight = rh + 'px';
+    });
+  }
+
+  window.addEventListener('resize', matchHeight);
+  renderCalendar();
+</script>
+</body>
+</html>
