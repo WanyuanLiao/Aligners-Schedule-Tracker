@@ -189,11 +189,11 @@
       transition: all 0.15s;
       user-select: none;
     }
-    .day-cell:hover:not(.other-month) { background: var(--gold-light); }
+    .day-cell:hover:not(.other-month) { background: #f5f0e8; }
     .day-cell.sun { color: var(--sun); }
     .day-cell.sat { color: var(--sat); }
     .day-cell.other-month { opacity: 0.25; cursor: default; }
-    .day-cell.today { box-shadow: 0 0 0 1.5px var(--gold); font-weight: 700; }
+    .day-cell.today { box-shadow: 0 0 0 1.5px #c8b89a; font-weight: 700; }
     .day-cell.selected {
       background: var(--crimson) !important;
       color: #fff !important;
@@ -249,8 +249,8 @@
       font-family: 'Noto Serif TC', serif;
     }
     .interval-btn:hover {
-      border-color: var(--gold);
-      background: #f4f7f2;
+      border-color: var(--crimson);
+      background: #fdf6f4;
       box-shadow: 0 4px 14px var(--shadow);
     }
     .interval-btn.active {
@@ -296,7 +296,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     .result-header {
-      background: linear-gradient(90deg, #e8ede5, #f2ede4);
+      background: linear-gradient(90deg, #e8e0d4, #ede8de);
       padding: 8px 14px;
       border-bottom: 1px solid var(--line);
       display: flex;
