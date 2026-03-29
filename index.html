@@ -14,7 +14,7 @@
       --paper: #f2ede4;
       --gold: #7a9e6e;
       --gold-light: #b8ccb0;
-      --crimson: #b85c45;
+      --crimson: #c0402a;
       --muted: #7a7068;
       --line: #c8c0b4;
       --surface: #fdfaf6;
@@ -120,40 +120,36 @@
 
     .cal-nav-center {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
-      gap: 3px;
+      gap: 4px;
     }
-    .month-display {
-      font-family: 'Playfair Display', serif;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--ink);
-      letter-spacing: 1px;
-    }
+    .month-display { display: none; }
     .picker-row {
       display: flex;
-      gap: 6px;
+      gap: 4px;
     }
     .picker-row select {
       font-family: 'Noto Serif TC', serif;
-      font-size: 11px;
+      font-size: 14px;
+      font-weight: 700;
       color: var(--ink);
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 3px;
-      padding: 2px 18px 2px 6px;
+      background: transparent;
+      border: none;
+      border-bottom: 1.5px solid var(--line);
+      border-radius: 0;
+      padding: 2px 20px 2px 2px;
       cursor: pointer;
       outline: none;
       appearance: none;
       -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%237a6f5f'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%237a7068'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 5px center;
+      background-position: right 3px center;
       background-size: 7px;
       transition: border-color 0.2s;
     }
-    .picker-row select:focus { border-color: var(--gold); }
+    .picker-row select:focus { border-color: var(--crimson); }
 
     /* Weekdays */
     .weekdays {
